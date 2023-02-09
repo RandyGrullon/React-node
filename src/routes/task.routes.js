@@ -1,17 +1,26 @@
-import {Router} from "express";
-import * as tasksController from "../controllers/task.controller"
+import { Router } from "express";
 const router = Router();
+import * as tasksController from "../controllers/task.controller";
+import { authJwt } from "../middlewares";
 
-const Task = require("../models/Task");
-
-
+// import Task from "../models/Task";
 
 router.get("/", tasksController.getTasks);
-router.get("/:id", tasksController.getTaskById);
-router.post("/", tasksController.createTask);
-router.put("/:id", tasksController.updateTaskById);
-router.delete("/:id", tasksController.deleteTaskById);
-
-
+router.get("/:taskId", tasksController.getTaskById);
+router.post(
+  "/",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  tasksController.createTask
+);
+router.put(
+  "/:taskId",
+  [authJwt.verifyToken, authJwt.isModerator],
+  tasksController.updateTaskById
+);
+router.delete(
+  "/:taskId",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  tasksController.deleteTaskById
+);
 
 module.exports = router;
