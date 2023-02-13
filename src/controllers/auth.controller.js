@@ -27,6 +27,7 @@ export const signUp = async (req, res) => {
   res.status(201).json({ token });
 };
 
+//crea un metodo para signin con varios http request 200 401 entre otros
 export const signIn = async (req, res) => {
   const user = await User.findOne({
     username: req.body.username,
@@ -44,8 +45,6 @@ export const signIn = async (req, res) => {
   const token = jwt.sign({ id: user.id }, config.SECRET, {
     expiresIn: 86400, //24horas
   });
-
-  console.log(user);
 
   res.json({ token });
 };

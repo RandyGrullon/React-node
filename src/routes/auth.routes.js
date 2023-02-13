@@ -1,9 +1,13 @@
-import  {Router} from "express"
-import * as authController from "../controllers/auth.controller"
-const router = Router()
+import { Router } from "express";
+import * as authController from "../controllers/auth.controller";
+import { verifySignup } from "../middlewares";
+const router = Router();
 
+router.post(
+  "/signup",
+  [verifySignup.checkDuplicateUsernameOrEmail, verifySignup.checkRolesExisted],
+  authController.signUp
+);
+router.post("/signin", authController.signIn);
 
-router.post('/signup', authController.signUp)
-router.post('/signin', authController.signIn)
-
-export default router
+export default router;
